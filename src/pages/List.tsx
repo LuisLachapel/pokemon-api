@@ -1,10 +1,16 @@
 
-import { Stack, Card, Image, Text, CardBody } from "@chakra-ui/react"
+import { Stack, Card, Image, Text, CardBody, CardDescription } from "@chakra-ui/react"
+import { DataList, DataListItem, DataListRoot } from "@chakra-ui/react";
+import { getPokemon } from "@/controller/getpokemon";
 
-import { Avatar } from "@/components/ui/avatar"
 
 
 const List = () => {
+  
+  const response = getPokemon();
+  console.log(response);
+  
+  //fetch('https://unpkg.com/pokemons@1.1.0/pokemons.json').then(response => response.json()).then(data => console.log(data))
 
   return (
   <>
@@ -18,6 +24,11 @@ const List = () => {
           
         <Card.Body>
           <Card.Title>bulbasaur</Card.Title>
+          <DataListRoot orientation='horizontal'>
+              <DataListItem /*key={} label={item.label} value={item.value}*//>
+              <DataListItem /*key={} label={item.label} value={item.value}*//>
+             
+          </DataListRoot>
         </Card.Body>
       </Card.Root>
 
