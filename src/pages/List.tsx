@@ -1,74 +1,70 @@
 
-import { Stack, Card, Image, Text, CardBody, CardDescription } from "@chakra-ui/react"
-import { DataList, DataListItem, DataListRoot } from "@chakra-ui/react";
+import { Stack, Card, Image } from "@chakra-ui/react"
+import { DataListItem, DataListRoot } from "@/components/ui/data-list"
 import { getPokemon } from "@/controller/getpokemon";
-
+import { useState, useEffect } from "react";
+import { Pokemon } from "@/models/pokemon";
+import { Container } from "@chakra-ui/react"
+import { Input } from "@chakra-ui/react"
 
 
 const List = () => {
   
-  const response = getPokemon();
-  console.log(response);
   
-  //fetch('https://unpkg.com/pokemons@1.1.0/pokemons.json').then(response => response.json()).then(data => console.log(data))
+  const [pokemons, setPokemons] = useState<Pokemon[]>([]);
+  const [query, setQuery] = useState("");
+
+  useEffect(() =>{
+    const getAll = async () =>{
+       const allPokemon = await getPokemon();
+       setPokemons(allPokemon);
+    };
+    getAll();
+  })
+
+  const pokemonFilter = pokemons?.slice(0,151).filter((pokemon) =>{
+    return pokemon.name.toLowerCase().match(query.toLowerCase());
+  })
+ 
+  
 
   return (
   <>
-    <Stack direction={{base: 'column', md: 'row'}} wrap='wrap' gap={5}>
+  <Container >
+    <Input placeholder="Buscar"
+    variant="flushed"
+    width="40%"
+    marginTop={4}
+    value={query}
+    onChange={(event) => setQuery(event.target.value.trim())}/>
+    <Stack direction={{base: 'column', md: 'row'}} wrap='wrap' gap={6} marginTop={4}>
+      
+      {pokemonFilter?.slice(0,151).map((pokemon) =>(
       <Card.Root maxW="md" overflow="hidden">
         <Image
-        src="https://img.pokemondb.net/sprites/black-white/anim/normal/bulbasaur.gif"
-        //sizes="sm"
-        height={150}
+        src={pokemon.imggif}
+        height={20}
+        fit="contain"
+
         />
           
         <Card.Body>
-          <Card.Title>bulbasaur</Card.Title>
+          <Card.Title>{pokemon.name}</Card.Title>
           <DataListRoot orientation='horizontal'>
-              <DataListItem /*key={} label={item.label} value={item.value}*//>
-              <DataListItem /*key={} label={item.label} value={item.value}*//>
-             
+          <DataListItem label="HP" value={pokemon.hp} />
+                <DataListItem label="Ataque" value={pokemon.attack} />
+                <DataListItem label="Defensa" value={pokemon.defense} />
+                <DataListItem label="Velocidad" value={pokemon.speed} />
+                <DataListItem label="E.Ataque" value={pokemon.sp_atk} />
+                <DataListItem label="E.Defensa" value={pokemon.sp_def} />
           </DataListRoot>
         </Card.Body>
       </Card.Root>
-
-      <Card.Root maxW="md">
-      <Image
-        src="https://img.pokemondb.net/sprites/black-white/anim/normal/ivysaur.gif"
-        //sizes="sm"
-        height={150}
-        />
-
-        <Card.Body>
-          <Card.Title>ivysaur</Card.Title>
-        </Card.Body>
-      </Card.Root>
-
-
-
+      ))}
       
-  
-      <Card.Root maxW="sm">
-        <Image
-        src="https://img.pokemondb.net/sprites/black-white/anim/normal/venusaur.gif"
-        sizes="sm"
-        height={150}/>
-        <Card.Body>
-          <Card.Title>venusaur</Card.Title>
-        </Card.Body>
-      </Card.Root>
-
-      <Card.Root maxW="sm">
-        <Image
-        src="https://img.pokemondb.net/sprites/black-white/anim/normal/charmander.gif"
-        sizes="sm"
-        height={150}/>
-        <Card.Body>
-          <Card.Title>charmander</Card.Title>
-        </Card.Body>
-      </Card.Root>
 
     </Stack>
+    </Container>
     
   </>
   );

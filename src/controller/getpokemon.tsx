@@ -17,9 +17,12 @@ export async function getPokemon(): Promise<Pokemon[]>{
     sp_def: pokemon.sp_def,
     speed: pokemon.speed,
     hp: pokemon.hp,
+    imggif: pokemon.sprites['animated'],
+    imglarge: pokemon.sprites['large'],
+    imgnormal: pokemon.sprites['normal']
 
   }));
-  
+
   return pokemons;
 
 }
